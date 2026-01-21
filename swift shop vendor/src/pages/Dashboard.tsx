@@ -17,6 +17,7 @@ const Dashboard = () => {
     const [isError, setIsError] = useState<boolean>(false)
     const [search, setSearch] = useState<string>('')
     const [filtered, setFiltered] = useState<product[]>([])
+    const [selectedCategory, setselectedCategory] = useState<string>('')
 
 
 useEffect (() => {
@@ -46,18 +47,21 @@ useEffect (() => {
 },[])
 
 useEffect(() => {
-    if (search === '') {
-            setFiltered(products);
-        }
-        else{
-            let data = [...products]
+    let data = [...products]
+        if(search !== ''){
             data = data.filter((p) => {
            return p.title.toLowerCase().includes(search.toLowerCase())
-    })
-    setFiltered(data)
+        })
         }
-   
-},[search, products])
+        if(selectedCategory !== ''){
+            data = data.filter((p) => p.category === selectedCategory) 
+        }
+    else {
+        setFiltered(products);
+        }
+
+   setFiltered(data)
+},[search, products, selectedCategory])
 
     if(isLoading){
         return <p>Products Loading</p>
@@ -81,7 +85,10 @@ useEffect(() => {
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </form>
-            <CategoryDropdown/>
+            <CategoryDropdown
+            selectedCategory = {selectedCategory}
+            onChangeCategory = {setselectedCategory}
+            />
             <ul>
                 {filtered.map((product) => (
                 <div key = {product.id}>

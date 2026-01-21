@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
+interface CategoryDropdownProps {
+  selectedCategory : string
+  onChangeCategory : (category:string) => void
+}
 
-const CategoryDropdown = () => {
+const CategoryDropdown : React.FC<CategoryDropdownProps>= ({selectedCategory,onChangeCategory}) => {
     const [categories, setCategories] = useState<string[]>([])
-    const [selectedcategory, setselectedcategory] = useState<string>('')
+
     useEffect (() => {
         const getCategories = async () =>{
             
@@ -15,22 +19,19 @@ const CategoryDropdown = () => {
        
     },[])
 
-    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setselectedcategory(event.target.value)
-      console.log(selectedcategory)
-    }
+   
   return (
     <div>
       <label htmlFor="categories">Select category here:</label>
       <select id="category dropdown"
-              className='bg-white, shadow-lg, rounded-md, ring-1 ring-black ring-opacity-5, p-2, w-48'
-              value={selectedcategory}
-              onChange={handleChange}
+              className='bg-white shadow-lg rounded-md ring-1 ring-black ring-opacity-5 p-2 w-48'
+              value={selectedCategory}
+              onChange={(e) => onChangeCategory(e.target.value)}
                 >
                 <option value="">All</option>
 
                 {categories.map((category) => (
-                  <option key={category} value="category">{category}</option>
+                  <option key={category} value={category}>{category}</option>
                   
                 ))}
 
