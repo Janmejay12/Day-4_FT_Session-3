@@ -5,50 +5,64 @@ import AddProductForm from '../components/AddProductForm';
 import Navbar from '../components/Navbar';
 
 
-  const products : product[] = [{
-    name : "Trekking Shoes",
-    id : 1,
-    price : 5500, 
-    brand : "decathlon",
-    stock : 15
-},
-{
-    name : "Jacket",
-    id : 2,
-    price : 8500, 
-    brand : "Simond",
-    stock : 3
-},
-{
-    name : "Sun glasses",
-    id : 3,
-    price : 4200, 
-    brand : "Oakley",
-    stock : 0
-},
-];
+
 
 
 const Dashboard = () => {
 
-    const [items, setItems] = useState<product[]>([])
+    const [products, setProducts] = useState<product[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isError, setIsError] = useState<boolean>(false)
+
 useEffect (() => {
-const productList = localStorage.getItem('products');
-const parsedProductlist : product[]= productList ?  JSON.parse(productList) : [];
-setItems(parsedProductlist);
+    const getProducts = async () =>{
+        try{
+            const response = await fetch('https://dummyjson.com/products')
+            if(!response.ok){
+            setIsError(true);
+            }
+            const parsedProductlist : product[] = await response.json() 
+            setProducts(parsedProductlist);
+        }
+        catch{
+            setIsError(true)
+        }
+        finally{
+            setIsLoading(false)
+        }
+        
+    }
+    getProducts();
+   
 },[])
 
-useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products));
-},[items])
+// useEffect(() => {
+//     localStorage.setItem('products', JSON.stringify(products));
+// },[products])
+
+    // if(isLoading){
+    //     return <p>Products Loading</p>
+    // }
+
+    //  if(isError){
+    //     return <p>Error fetching products</p>
+    // }
+    // if(products.length === 0){
+    //     return <p>No products found</p>
+    // }
+
+
+
+
   return (
     <div className='bg-blue'>
         <Navbar/>
         <div>
             <ul>
-                {items.map((product) => (
+                {products && products.map((product) => (
                 <div key = {product.id}>
-                    <ProductCard product={product}/>
+                    {product.name}
+                    {/* <ProductCard product={product}/> */}
                 </div>
             ))} 
             </ul>
