@@ -3,21 +3,40 @@ import type { product } from '../product'
 import CategoryDropdown from '../components/CategoryDropdown'
 import ProductCard from '../components/ProductCard'
 import productService from '../services/productService'
-import { useProducts } from '../hooks/useProducts'
 
 const Products = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [isError, setIsError] = useState<boolean>(false)
+    const [products, setProducts] = useState<product[]>([])
     const [search, setSearch] = useState<string>('')
     const [filtered, setFiltered] = useState<product[]>([])
     const [selectedCategory, setselectedCategory] = useState<string>('')
-    
-    const {data : products, isLoading, isError} = useProducts()
-    
+    useEffect (() => {
+        const getProducts = async () =>{
+            try{
+                const response = await productService.getAllProducts()
+                if(!response){
+                setIsError(true);
+                setIsLoading(false)
+                return
+                }
+                else{
+                setProducts(response);
+                }
+            }
+            catch{
+                setIsError(true)
+            }
+            finally{
+                setIsLoading(false)
+            }
+            
+        }   
+        getProducts();
+       
+    },[])
 
     useEffect(() => {
-        if(!products){
-            setFiltered([])
-            return
-        }
     let data = [...products]
         if(search !== ''){
             data = data.filter((p) => {
@@ -27,9 +46,9 @@ const Products = () => {
         if(selectedCategory !== ''){
             data = data.filter((p) => p.category === selectedCategory) 
         }
-   
-        setFiltered(data);
-        
+    else {
+        setFiltered(products);
+        }
 
    setFiltered(data)
 },[search, products, selectedCategory])
@@ -38,7 +57,7 @@ const Products = () => {
         return <p>Products Loading</p>
     }
 
-    if(isError){
+     if(isError){
         return <p>Error fetching products</p>
     }
     if(Array.isArray(products) && products.length === 0){

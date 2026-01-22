@@ -6,7 +6,7 @@ import type { product } from "../product";
         const response = await api.get<any>('/')
         console.log("response : " ,response.data)
         if (response.data && Array.isArray(response.data.products)) {
-        return response.data;}
+        return response.data.products;}
     }
 
     static async getProductById(id : number) : Promise<product>{
