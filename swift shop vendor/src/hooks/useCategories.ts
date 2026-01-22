@@ -2,16 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import productService from "../services/productService";
 
 const categoryKeys = {
-  all: ['categories'],
-  detail: (id : number) => [...categoryKeys.all, id],
+  all: ['categories'] as const
 };
 
-const fetchCategories = async () => {
-  const response = await productService.getAllCategories()
-  return response.data;
+const fetchCategories = async () : Promise<string[]> => {
+  return await productService.getAllCategories()
 };
 
 
 export const useCategories = () => {
-  return useQuery(categoryKeys.all,fetchCategories)
+  return useQuery({
+    queryKey : categoryKeys.all,
+    queryFn : fetchCategories,
+    staleTime : 5 * 60 * 1000,
+  })
 }

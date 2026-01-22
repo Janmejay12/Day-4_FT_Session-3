@@ -3,41 +3,17 @@ import type { product } from '../product'
 import CategoryDropdown from '../components/CategoryDropdown'
 import ProductCard from '../components/ProductCard'
 import productService from '../services/productService'
+import { useProducts } from '../hooks/useProducts'
 
 const Products = () => {
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [isError, setIsError] = useState<boolean>(false)
-    const [products, setProducts] = useState<product[]>([])
     const [search, setSearch] = useState<string>('')
     const [filtered, setFiltered] = useState<product[]>([])
     const [selectedCategory, setselectedCategory] = useState<string>('')
-    useEffect (() => {
-        const getProducts = async () =>{
-            try{
-                const response = await productService.getAllProducts()
-                if(!response){
-                setIsError(true);
-                setIsLoading(false)
-                return
-                }
-                else{
-                setProducts(response.products);
-                }
-            }
-            catch{
-                setIsError(true)
-            }
-            finally{
-                setIsLoading(false)
-            }
-            
-        }   
-        getProducts();
-       
-    },[])
+    const {data : products, isLoading, isError} = useProducts()
+    
 
     useEffect(() => {
-    let data = [...products]
+    let data = [...products?]
         if(search !== ''){
             data = data.filter((p) => {
            return p.title.toLowerCase().includes(search.toLowerCase())
@@ -57,7 +33,7 @@ const Products = () => {
         return <p>Products Loading</p>
     }
 
-     if(isError){
+    if(isError){
         return <p>Error fetching products</p>
     }
     if(Array.isArray(products) && products.length === 0){

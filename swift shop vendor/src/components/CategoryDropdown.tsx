@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import productService from '../services/productService'
+import { useCategories } from '../hooks/useCategories'
 
 interface CategoryDropdownProps {
   selectedCategory : string
@@ -7,17 +8,10 @@ interface CategoryDropdownProps {
 }
 
 const CategoryDropdown : React.FC<CategoryDropdownProps>= ({selectedCategory,onChangeCategory}) => {
-    const [categories, setCategories] = useState<string[]>([])
+    const {data : categories, isLoading, isError} = useCategories()
 
-    useEffect (() => {
-        const getCategories = async () =>{
-            
-                const response = await productService.getAllCategories()                         
-                setCategories(response);  
-        }   
-        getCategories();
-       
-    },[])
+    if(isLoading) return <h3> loading categories...</h3>
+    if(isError) return <h2>failed to load categories</h2>
 
    
   return (
@@ -30,7 +24,7 @@ const CategoryDropdown : React.FC<CategoryDropdownProps>= ({selectedCategory,onC
                 >
                 <option value="">All</option>
 
-                {categories.map((category) => (
+                {categories?.map((category) => (
                   <option key={category} value={category}>{category}</option>
                   
                 ))}

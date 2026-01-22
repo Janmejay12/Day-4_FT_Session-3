@@ -11,6 +11,7 @@ import Cart from './pages/Cart.tsx'
 import About from './pages/About.tsx'
 import Error from './pages/Error.tsx'
 import Navbar from './components/Navbar.tsx'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 
 const AppLayout = () => {
@@ -23,6 +24,7 @@ const AppLayout = () => {
     </>
   );
 };
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,9 @@ const router = createBrowserRouter([
 
 ])
 createRoot(document.getElementById('root')!).render(
+  <QueryClientProvider client={queryClient}>
   <CartProvider>
     <RouterProvider router={router} />
 </CartProvider>
+</QueryClientProvider>
 )
