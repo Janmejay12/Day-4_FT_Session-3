@@ -7,7 +7,7 @@ interface ProductCardProps{
 
 const ProductCard : React.FC<ProductCardProps> = ({product}) =>  {
   return (
-    <Link to={`product/${product.id}`}>
+    <Link to={`/product/${product.id}`}>
       <div className='border rounded-lg p-4 '>
         
           <h2 className='text-lg font-bold mb-3'>{product.title}</h2>
