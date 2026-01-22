@@ -9,11 +9,16 @@ const Products = () => {
     const [search, setSearch] = useState<string>('')
     const [filtered, setFiltered] = useState<product[]>([])
     const [selectedCategory, setselectedCategory] = useState<string>('')
+    
     const {data : products, isLoading, isError} = useProducts()
     
 
     useEffect(() => {
-    let data = [...products?]
+        if(!products){
+            setFiltered([])
+            return
+        }
+    let data = [...products]
         if(search !== ''){
             data = data.filter((p) => {
            return p.title.toLowerCase().includes(search.toLowerCase())
@@ -22,9 +27,9 @@ const Products = () => {
         if(selectedCategory !== ''){
             data = data.filter((p) => p.category === selectedCategory) 
         }
-    else {
-        setFiltered(products);
-        }
+   
+        setFiltered(data);
+        
 
    setFiltered(data)
 },[search, products, selectedCategory])
