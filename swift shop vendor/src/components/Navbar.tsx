@@ -1,30 +1,27 @@
-import React from 'react'
-import { useTheme } from '../hooks/useTheme'
-import '../theme.css'
+import React, { useState } from 'react'
+import { NavLink } from 'react-router-dom'
+//import '../theme.css'
 
 const Navbar = () => {
 
-    const {theme, toggleTheme} = useTheme()
+   const [quantity, setQuantity] = useState<string>('')
   return (
-    <nav className='bg-gray-800 p-6 '>
+    <nav className='bg-green-800 p-6 '>
         <div>
             Swift Shop Vendor
         </div>
-        <button className='text-black-200 hover:bg-gray-600 hover:text-white px-3 py-2'>
+        <NavLink to = "/" className={({isActive}) => (isActive ? 'active' : 'notactive' )}>
             Home
-        </button>
-        <button className='text-black-200 hover:bg-gray-600 hover:text-white px-3 py-2'>
+        </NavLink>
+        <NavLink to = "/products" className={({isActive}) => (isActive ? 'active' : 'notactive' )}>
+            Products
+        </NavLink>
+        <NavLink to = "/about" className={({isActive}) => (isActive ? 'active' : 'notactive' )}>
             About Us
-        </button>
-        <button className='text-black-200 hover:bg-gray-600 hover:text-white px-3 py-2'>
-            get Help
-        </button>
-        <button className='text-black-200 hover:bg-gray-600 hover:text-white px-3 py-2'     >
-            products
-        </button>
-        <button className='text-black-200 hover:bg-gray-600 hover:text-white px-3 py-2' onClick={toggleTheme}>
-            {theme === 'light' ? 'light' : 'dark'} Mode
-        </button>
+        </NavLink>
+        <NavLink to = "/cart" className={({isActive}) => (isActive ? 'active' : 'notactive' )}>
+            Cart
+        </NavLink>
     </nav>
       
     

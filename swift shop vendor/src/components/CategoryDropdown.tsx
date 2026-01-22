@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import productService from '../services/productService'
 
 interface CategoryDropdownProps {
   selectedCategory : string
@@ -11,9 +12,8 @@ const CategoryDropdown : React.FC<CategoryDropdownProps>= ({selectedCategory,onC
     useEffect (() => {
         const getCategories = async () =>{
             
-                const response = await fetch('https://dummyjson.com/products/category-list')                                
-                const data : string[] = await response.json() 
-                setCategories(data);  
+                const response = await productService.getAllCategories()                         
+                setCategories(response);  
         }   
         getCategories();
        

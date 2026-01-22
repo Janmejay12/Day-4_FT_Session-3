@@ -2,13 +2,47 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import CartProvider from './context/CartProvider.tsx'
-
+import Dashboard from './pages/Dashboard.tsx'
+import Products from './pages/Products.tsx'
+import Product from './pages/Product.tsx'
 import App from './App.tsx'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import Cart from './pages/Cart.tsx'
+import About from './pages/About.tsx'
+import Error from './pages/Error.tsx'
+import Navbar from './components/Navbar.tsx'
 
+
+const AppLayout = () => {
+  return (
+    <>
+      <Navbar />
+      <main>
+        <Outlet /> 
+      </main>
+    </>
+  );
+};
+
+const router = createBrowserRouter([
+  {
+    path : '/',
+    element : <AppLayout/>,
+    children : [
+      {index: true, element : <Dashboard/>},
+      {path : '/products', element: <Products/>},
+      {path : '/product/:productId', element: <Product/>},
+      {path : '/cart', element: <Cart/>},
+
+    ]
+  },
+  {path : '/about', element: <About/>},
+  {path : '/*', element: <Error/>},
+
+
+])
 createRoot(document.getElementById('root')!).render(
   <CartProvider>
-  <StrictMode>
-    <App />
-  </StrictMode>
+    <RouterProvider router={router} />
 </CartProvider>
 )
