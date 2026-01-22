@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import type {product} from '../product'
 import ProductCard from '../components/ProductCard';
 import AddProductForm from '../components/AddProductForm';
 import Navbar from '../components/Navbar';
 import Category from '../components/CategoryDropdown';
 import CategoryDropdown from '../components/CategoryDropdown';
+import { CartContext } from '../context/CartProvider';
 
 
 
@@ -18,7 +19,7 @@ const Dashboard = () => {
     const [search, setSearch] = useState<string>('')
     const [filtered, setFiltered] = useState<product[]>([])
     const [selectedCategory, setselectedCategory] = useState<string>('')
-
+    const {cartItems,addToCart} = useContext(CartContext)
 
 useEffect (() => {
     const getProducts = async () =>{
